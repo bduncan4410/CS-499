@@ -1,8 +1,6 @@
-## Welcome to GitHub Pages
+## Welcome to CS 499 Capstone
 
-You can use the [editor on GitHub](https://github.com/bduncan4410/CS-499/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+My Name is Brian Duncan, and this is my capstone page that showcase a few of my projects.
 
 ### Markdown
 
