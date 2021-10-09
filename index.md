@@ -2,34 +2,242 @@
 
 My Name is Brian Duncan, and this is my capstone page that showcase a few of my projects.
 
-### Markdown
+### Project One
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Below is the one of the original files that was modified to show
 
 ```markdown
-Syntax highlighted code block
+public class Contact 
+{
+	private String id, firstName, lastName, phoneNum, address;
 
-# Header 1
-## Header 2
-### Header 3
+	
 
-- Bulleted
-- List
+	public Contact(String id, String firstName, String lastName, String phoneNum, String address) throws Exception {
+		if (id.length() < 11) 
+		{
+			if (firstName.length() < 11) 
+			{
+				if (lastName.length() < 11)
+				{
+					if (phoneNum.length() == 10) 
+					{
+						if (address.length() < 31) 
+						{
+							this.id = id;
+							this.firstName = firstName;
+							this.lastName = lastName;
+							this.phoneNum = phoneNum;
+							this.address = address;
+						}
+						else 
+						{
+							throw new Exception("Invalid Address Length");
+						}
+					}
+					else 
+					{
+						throw new Exception("Invalid Phone Number Size");
+					}
+				}
+				else 
+				{
+					throw new Exception("Invalid Last Name Length");
+				}
+			}
+			else 
+			{
+				throw new Exception("FirstName Length");
+			}
+		}
+		else 
+		{
+			throw new Exception("Invalid ID Length");
+		}
+		
+		
+	}
+	
+	public String getId() 
+	{
+		return id;
+	}
 
-1. Numbered
-2. List
+	public String getFirstName() 
+	{
+		return firstName;
+	}
 
-**Bold** and _Italic_ and `Code` text
+	public String getLastName() 
+	{
+		return lastName;
+	}
 
-[Link](url) and ![Image](src)
+	public String getPhoneNum() 
+	{
+		return phoneNum;
+	}
+
+	public String getAddress() 
+	{
+		return address;
+	}
+
+	public void setId(String id) throws Exception 
+	{
+		if (id.length() < 11) 
+		{
+			this.id = id;
+		}
+		else
+		{
+			throw new Exception("ID Too long");
+		}
+	}
+
+	public void setFirstName(String firstName) throws Exception 
+	{
+		if (firstName.length() < 11) 
+		{
+			this.firstName = firstName;
+		}
+		else
+		{
+			throw new Exception("First Name Too Long");
+		}
+	}
+
+	public void setLastName(String lastName) throws Exception 
+	{
+		if (lastName.length() < 11)
+		{
+			this.lastName = lastName;
+		}
+		else
+		{
+			throw new Exception("Last Name Too Long");
+		}
+	}
+
+	public void setPhoneNum(String phoneNum) throws Exception 
+	{
+		if (phoneNum.length() == 10) 
+		{
+			this.phoneNum = phoneNum;
+		}
+		else
+		{
+			throw new Exception("Phone Number Too Long");
+		}
+	}
+
+	public void setAddress(String address) throws Exception 
+	{
+		if (address.length() < 31) 
+		{
+			this.address = address;
+		}
+		else
+		{
+			throw new Exception("Address Too Long");
+		}
+	}
+	
+}` 
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+#The code was modified to clean it up and optimize some of the code to meet the MVC design pattern. The code was modified into three different branches, the model which controls the attributes of the object as well as the business logic of it. The Controller handles the view and the model, this started as a place to store models and had the ability to communicate them to the view. The view consisted of a vey basic console output which will be handled with more grace with future updates. 
 
-### Jekyll Themes
+#Below are the modifications of the application with the new MVC design pattern.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/bduncan4410/CS-499/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+```markdown
 
-### Support or Contact
+package Controller;
+import java.util.ArrayList;
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+import Models.ContactModel;
+
+public class ContactController 
+{
+	
+	private ArrayList<ContactModel> ContactList = new ArrayList<ContactModel>();
+
+	public ContactController() 
+	{
+		
+		
+	}
+	
+	private ContactModel search(String id)
+	{
+		for (int i = 0; i < ContactList.size(); i++) 
+		{
+			if (id == ContactList.get(i).getId()) 
+			{
+				return ContactList.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public void addContact(ContactModel contactModel) throws Exception 
+	{
+		if (ContactList.isEmpty()) 
+		{
+			ContactList.add(contactModel);
+		}
+		else if (search(contactModel.getId()) == null)
+		{
+			ContactList.add(contactModel);
+		}
+		else 
+		{
+			throw new Exception("ID is not unique to the contact");
+		}
+		
+	}
+	public void deleteContact(String ID) throws Exception 
+	{
+		if (search(ID) != null) 
+		{
+			ContactList.remove(search(ID));
+		}
+		else
+		{
+			throw new Exception("No Id matches searched ID");
+		}
+		
+	}
+	public void updateFirstName(String ID, String newFirstName) throws Exception 
+	{
+		
+		search(ID).setFirstName(newFirstName);
+		
+	}
+	public void updateLastName(String ID, String newLastName) throws Exception 
+	{
+		
+		search(ID).setFirstName(newLastName);
+	}
+	public void updateAddress(String ID, String newAddress) throws Exception 
+	{
+		
+		search(ID).setFirstName(newAddress);
+		
+		
+	}
+	public void updatePhoneNum(String ID, String newPhoneNum) throws Exception 
+	{
+		
+		search(ID).setPhoneNum(newPhoneNum);
+		
+		
+	}
+	
+	
+}
+
+
+```
+This controller handles the bulk of the application workload by storing the models in a list and using different methods to minipulate each one without ever having to know the business logic behind it. This design patten works best with teams because it has the ability to be independent of each part of the application. Meaning that one developer can work on the view and another can work on the controller at the same time. In the next module, a database is added into the mix which creates a better understanding of the true potential of the design pattern. 
