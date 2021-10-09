@@ -241,3 +241,5 @@ public class ContactController
 
 ```
 This controller handles the bulk of the application workload by storing the models in a list and using different methods to minipulate each one without ever having to know the business logic behind it. This design patten works best with teams because it has the ability to be independent of each part of the application. Meaning that one developer can work on the view and another can work on the controller at the same time. In the next module, a database is added into the mix which creates a better understanding of the true potential of the design pattern. 
+
+//Note that the rest of the models, view and controllers for user, task, and contact are in the source code provided at [https://github.com/bduncan4410/CS-499]
