@@ -1,245 +1,116 @@
-## Welcome to CS 499 Capstone
+## Additions to the Project
 
-My Name is Brian Duncan, and this is my capstone page that showcase a few of my projects.
+In this part of the project, the application from the previous module was used as a template to demonstrate the functionality of JDBC in connecting a database to the application.
+This project entails a number of different controllers and models, so only one will be shown in depth in this page, more can be see in the main repository. 
 
-### Project One
+### Project Two
 
-Below is the one of the original files that was modified to show
+The main addition to the application was the connection to the database which is a very simple task to complete. Below is the code that allows a user to connect to SQL Server DB:
+
 
 ```markdown
-public class Contact 
+package Database;
+
+import Models.AppointmentModel;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
+/**
+ *
+ * @author Brian
+ */
+public class ConnectionController 
 {
-	private String id, firstName, lastName, phoneNum, address;
+    private Connection conn;
+    private Statement statement = conn.createStatement(); 
 
-	
+    public ConnectionController() throws SQLException 
+    {
+        this.conn = ConnectionManager.getConnection();
+        this.statement = conn.createStatement(); 
+    }
+```
 
-	public Contact(String id, String firstName, String lastName, String phoneNum, String address) throws Exception {
-		if (id.length() < 11) 
-		{
-			if (firstName.length() < 11) 
-			{
-				if (lastName.length() < 11)
-				{
-					if (phoneNum.length() == 10) 
-					{
-						if (address.length() < 31) 
-						{
-							this.id = id;
-							this.firstName = firstName;
-							this.lastName = lastName;
-							this.phoneNum = phoneNum;
-							this.address = address;
-						}
-						else 
-						{
-							throw new Exception("Invalid Address Length");
-						}
-					}
-					else 
-					{
-						throw new Exception("Invalid Phone Number Size");
-					}
-				}
-				else 
-				{
-					throw new Exception("Invalid Last Name Length");
-				}
-			}
-			else 
-			{
-				throw new Exception("FirstName Length");
-			}
-		}
-		else 
-		{
-			throw new Exception("Invalid ID Length");
-		}
-		
-		
-	}
-	
-	public String getId() 
-	{
-		return id;
-	}
+In this code snippit, the application is create a new connection to the database from the connectionManager object which will be discussed next. The connection has a large amount of
+commands that can also be used to execute commands and get results from queries. The constructor here is just getting our connection and setting it to the private varable
+called conn. In addition, a statement is created so that queries can be send to the database via the Connection object.  Bellow is the method for executing a given query
+a generic query can be passed into here and can contain anything. With that being said. in Project Three, security will be enforced which means a filter will need to be 
+used to prevent unwanted access to the database. 
+```markdown
+public boolean executeQuery(String query) throws SQLException
+    {
+       return this.statement.execute(query);
+       
+    }
+```
+This method returns a boolean of true if the queries executes and false otherwise. This is a good way to ensure the the query ran without issues and got data back from the database. 
+To reiterate, this is a bad practice currently, but will be updated in the next project. This was done intentally to show an example of secure coding. 
 
-	public String getFirstName() 
-	{
-		return firstName;
-	}
+The last method in the class is a simple read query which just returns  a result set which contains all of the information from the query:
 
-	public String getLastName() 
-	{
-		return lastName;
-	}
+```markdown
+public ResultSet executeReadQuery(String query)
+    {
+        try 
+        {
+            this.statement.execute(query);
+            return this.statement.getResultSet();
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            return null;
+        }
+```
 
-	public String getPhoneNum() 
-	{
-		return phoneNum;
-	}
+#Connection Manager
 
-	public String getAddress() 
-	{
-		return address;
-	}
+In this object, a connection to the database in established and stored into a varable. The connection information is stored as a private static string which allows for
+its state to always remain the same. When working with jdbc the driver must always be the same as the database or it will not function properly. After settng up the variables
+the application tests the connection with the username and password to ensure it is well met. If an exception is thrown, or the connection cannot be made this is printed to the console
 
-	public void setId(String id) throws Exception 
-	{
-		if (id.length() < 11) 
-		{
-			this.id = id;
-		}
-		else
-		{
-			throw new Exception("ID Too long");
-		}
-	}
 
-	public void setFirstName(String firstName) throws Exception 
-	{
-		if (firstName.length() < 11) 
-		{
-			this.firstName = firstName;
-		}
-		else
-		{
-			throw new Exception("First Name Too Long");
-		}
-	}
+```markdown
 
-	public void setLastName(String lastName) throws Exception 
-	{
-		if (lastName.length() < 11)
-		{
-			this.lastName = lastName;
-		}
-		else
-		{
-			throw new Exception("Last Name Too Long");
-		}
-	}
+public class ConnectionManager {
+    private static String url = "jdbc:sqlserver://database-1.cx62jlbgmqkl.us-east-2.rds.amazonaws.com:1433";    
+    private static String driverName = "com.mysql.jdbc.Driver";   
+    private static String username = "admin";   
+    private static String password = "admin";
+    private static Connection con;
+    private static String urlstring;
 
-	public void setPhoneNum(String phoneNum) throws Exception 
-	{
-		if (phoneNum.length() == 10) 
-		{
-			this.phoneNum = phoneNum;
-		}
-		else
-		{
-			throw new Exception("Phone Number Too Long");
-		}
-	}
-
-	public void setAddress(String address) throws Exception 
-	{
-		if (address.length() < 31) 
-		{
-			this.address = address;
-		}
-		else
-		{
-			throw new Exception("Address Too Long");
-		}
-	}
-	
-}` 
+    public static Connection getConnection() {
+        try 
+        {
+            Class.forName(driverName);
+            try 
+            {
+                con = DriverManager.getConnection(urlstring, username, password);
+            } 
+            catch (SQLException ex) 
+            {
+                
+                System.out.println("Failed to create the database connection."); 
+            }
+        } 
+        catch (ClassNotFoundException ex) 
+        {
+            // log an exception. for example:
+            System.out.println("Driver not found."); 
+        }
+        return con;
+    }
 ```
 
 #The code was modified to clean it up and optimize some of the code to meet the MVC design pattern. The code was modified into three different branches, the model which controls the attributes of the object as well as the business logic of it. The Controller handles the view and the model, this started as a place to store models and had the ability to communicate them to the view. The view consisted of a vey basic console output which will be handled with more grace with future updates. 
 
 #Below are the modifications of the application with the new MVC design pattern.
 
-```markdown
 
-package Controller;
-import java.util.ArrayList;
-
-import Models.ContactModel;
-
-public class ContactController 
-{
-	
-	private ArrayList<ContactModel> ContactList = new ArrayList<ContactModel>();
-
-	public ContactController() 
-	{
-		
-		
-	}
-	
-	private ContactModel search(String id)
-	{
-		for (int i = 0; i < ContactList.size(); i++) 
-		{
-			if (id == ContactList.get(i).getId()) 
-			{
-				return ContactList.get(i);
-			}
-		}
-		
-		return null;
-	}
-	
-	public void addContact(ContactModel contactModel) throws Exception 
-	{
-		if (ContactList.isEmpty()) 
-		{
-			ContactList.add(contactModel);
-		}
-		else if (search(contactModel.getId()) == null)
-		{
-			ContactList.add(contactModel);
-		}
-		else 
-		{
-			throw new Exception("ID is not unique to the contact");
-		}
-		
-	}
-	public void deleteContact(String ID) throws Exception 
-	{
-		if (search(ID) != null) 
-		{
-			ContactList.remove(search(ID));
-		}
-		else
-		{
-			throw new Exception("No Id matches searched ID");
-		}
-		
-	}
-	public void updateFirstName(String ID, String newFirstName) throws Exception 
-	{
-		
-		search(ID).setFirstName(newFirstName);
-		
-	}
-	public void updateLastName(String ID, String newLastName) throws Exception 
-	{
-		
-		search(ID).setFirstName(newLastName);
-	}
-	public void updateAddress(String ID, String newAddress) throws Exception 
-	{
-		
-		search(ID).setFirstName(newAddress);
-		
-		
-	}
-	public void updatePhoneNum(String ID, String newPhoneNum) throws Exception 
-	{
-		
-		search(ID).setPhoneNum(newPhoneNum);
-		
-		
-	}
-	
-	
-}
-
-
-```
 This controller handles the bulk of the application workload by storing the models in a list and using different methods to minipulate each one without ever having to know the business logic behind it. This design patten works best with teams because it has the ability to be independent of each part of the application. Meaning that one developer can work on the view and another can work on the controller at the same time. In the next module, a database is added into the mix which creates a better understanding of the true potential of the design pattern. 
 
 //Note that the rest of the models, view and controllers for user, task, and contact are in the source code provided at [https://github.com/bduncan4410/CS-499]
