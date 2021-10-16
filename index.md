@@ -15,6 +15,7 @@ The project is looking at a large overhaul. The first enhancement that is going 
 This pattern is often used in a team environment as well as a web environment. The main goal of this pattern is to distinguish different aspects of the application such that multiple people can work on the code simultaneously.
 The next enhancement was to add a database to store the models. This was a large enhancement due to a lot of the methods having to be reworked in order to send data to the database instead of objects and arrays within the application.  The main technology that was used in this project was JDBC and SQL server due to their ease of use and popularity. 
 The last enhancement, which was the most important was updating and patching any security flaws in the code. This flaws ranged from variable accessibility to SQL injection attacks. SQL injection attacks occur when a user is able to input sql code the returns data that was not intended for it. This attacks can be prevented by restricting the users input of characters such as an equal sign. 
+
 ##What are the future plans for this project?
 The project has some functionality after all of the enhancement are implemented, but it does not have a user interface to use those functions. The main goal in future updates is to add a graphical web base user interface from which the user can access their own contacts from anywhere.
   
