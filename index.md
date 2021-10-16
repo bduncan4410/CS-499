@@ -1,6 +1,3 @@
-layout: page
-title: "Project 1"
-permalink: /Project1
 ## Welcome to CS 499 Capstone
 
 My Name is Brian Duncan, and this is my capstone page that showcases enhancements made to a simple project created to work with JUnit testing.
