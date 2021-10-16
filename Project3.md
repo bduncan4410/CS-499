@@ -1,6 +1,6 @@
 layout: page
 title: "Project 2"
-permalink: /Project2
+permalink: /Project3
 
 ## Additions to the Project
 
