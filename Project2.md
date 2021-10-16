@@ -1,3 +1,7 @@
+layout: page
+title: "Project 2"
+permalink: /Project2
+
 ## Additions to the Project
 
 In this part of the project, the application from the previous module was used as a template to demonstrate the functionality of JDBC in connecting a database to the application.
