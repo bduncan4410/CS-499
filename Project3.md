@@ -61,3 +61,95 @@ query.setInt(1, id);
         }
     } 
 ```
+
+This methods both take an model as a parameter and use its attributes to make the respective string. This helps resolve the issue of SQL injection by just passed anything in the 
+variable into the statement as plain text. So if a user passed in "5" or 1=1; then ""5" or 1=1" would be sent to the database.
+This change is also made in a few other places in this controller, as shown below. 
+```
+ public ContactModel viewContact(int id) 
+    {
+        
+        try 
+        {
+            PreparedStatement query = connCont.getConnection().prepareStatement("Select from Contacts where ID = ?;");
+            query.setInt(1, id);
+            return toModel(connCont.executeReadQuery(query));
+        } 
+        catch (Exception e) 
+        {
+         
+            return null;
+        }
+    }
+
+    /*Adds a contact to the list of Contacts 
+     * also ensures that the contact id is unique. 
+     */
+    public boolean addContact (int ID, String firstName, String lastName, String address , String phoneNumber)
+    {
+            ContactModel newContact;
+            try  
+            {
+                    newContact = new ContactModel(ID, firstName, lastName, address, phoneNumber);
+                        connCont.executeQuery(createInsertString(newContact));
+                            return true;
+             }
+             catch(Exception e)
+             {
+                   return false;
+             }
+            
+            
+
+    }
+    public boolean removeContact  (ContactModel newContact)
+    {
+           
+            try 
+            {
+                    
+                connCont.executeQuery(createDeleteString(newContact));
+                return true;
+
+            } 
+            catch (SQLException e) 
+            {
+
+                    return false;
+            }
+    }
+	public boolean updateFirstName(String ID, String newFirstName) throws Exception 
+    {
+          try 
+        {
+            PreparedStatement query = connCont.getConnection().prepareStatement("Update  Customers Set First_Name =  ? WHERE CustomerID = ? ;");
+            query.setString(1, newFirstName);
+            query.setString(2, ID);
+            connCont.executeQuery(query);
+            return true;
+        } 
+          catch (SQLException e) 
+        {
+            
+            return false;
+        }
+    }
+    public boolean updateLastName(String ID, String newLastName) throws Exception 
+    {
+          try 
+        {
+            PreparedStatement query = connCont.getConnection().prepareStatement("Update  Customers Set First_Name = ? WHERE CustomerID = ? ; ");
+            query.setString(1, newLastName);
+            query.setString(2, ID);
+            connCont.executeQuery(query);
+            return true;
+        } 
+          catch (SQLException e) 
+        {
+            
+            return false;
+        }
+    }
+```
+
+This is just a simple fix for SQL Injection that uses resources that are already availible to us. This was also complete in the User, Task, and Appointment models and controllers. 
